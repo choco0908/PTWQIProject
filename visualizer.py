@@ -23,7 +23,7 @@ class Visualizer:
         self.fig = None
         self.axes = None
 
-    def prepare(self, char_data):
+    def prepare(self, chart_data):
         # 캔버스를 초기화하고 4개의 차트를 그릴 준비
         self.fig, self.axes = plt.subplots(nrows=4, ncols=1, facecolor='w', sharex=True)
         for ax in self.axes:
@@ -33,12 +33,12 @@ class Visualizer:
         # 차트 1.일봉 차트
         self.axes[ChartIndex.Daily.value].set_ylabel('Env. ') # y축 레이블 표시
         # 거래량 가시화
-        x = np.arange(len(char_data))
-        volume = np.array(char_data[:,-1].tolist())
+        x = np.arange(len(chart_data))
+        volume = np.array(chart_data)[:, -1].tolist()
         self.axes[ChartIndex.Daily.value].bar(x, volume, color='b', alpha=0.3)
         # ohlc란 open, high, low, close의 약자로 이 순서로 구성된 2차원 배열
         ax = self.axes[ChartIndex.Daily.value].twinx()
-        ohlc = np.hstack((x.reshape(-1, 1), np.array(char_data)[:, 1:-1]))
+        ohlc = np.hstack((x.reshape(-1, 1), np.array(chart_data)[:, 1:-1]))
         # self.axes[0]에 봉 차트 출력
         # 양봉은 빨간색으로, 음봉은 파란색으로 표시
         candlestick_ohlc(ax, ohlc, colorup='r', colordown='b')

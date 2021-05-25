@@ -30,6 +30,7 @@ class PolicyNetwork:
 
     def predict(self, sample):
         self.prob = self.model.predict(np.array(sample).reshape((1, -1, self.input_dim)))[0]
+        return self.prob
 
     def train_on_batch(self, x, y):
         return self.model.train_on_batch(x, y)
