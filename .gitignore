@@ -1,1 +1,5 @@
 .idea/
+chart_data/
+epoch_summary/
+logs/
+*.pyc

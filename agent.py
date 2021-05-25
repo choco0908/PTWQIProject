@@ -17,8 +17,8 @@ class Agent:
     ACTION_BUY = 0 # 매수
     ACTION_SELL = 1 # 매도
     ACTION_HOLD = 2 # 관망
-    ACTION = [ACTION_BUY, ACTION_SELL] # 인공 신경망에서 확률을 구할 행동들
-    NUM_ACTION = len(ACTION) # 인공 신경망에서 고려할 출력값의 개수
+    ACTIONS = [ACTION_BUY, ACTION_SELL] # 인공 신경망에서 확률을 구할 행동들
+    NUM_ACTIONS = len(ACTIONS) # 인공 신경망에서 고려할 출력값의 개수
 
 
     def __init__(self, environment, min_trading_unit = 1, max_trading_unit = 2, delayed_reward_threshold = .05):
@@ -74,7 +74,7 @@ class Agent:
         #탐험 결정
         if np.random.rand() < epsilon:
             exploration = True
-            action = np.random.randint(self.NUM_ACTION) # 무작위로 행동 결정
+            action = np.random.randint(self.NUM_ACTIONS) # 무작위로 행동 결정
         else:
             exploration = False
             probs = policy_network.predict(sample) # 각 행동에 대한 확률
