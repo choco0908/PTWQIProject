@@ -2,4 +2,6 @@
 chart_data/
 epoch_summary/
 logs/
+preprocessed_chart_data/
+models/
 *.pyc

@@ -19,10 +19,16 @@ if __name__ == '__main__':
     stream_handler.setLevel(logging.INFO)
     logging.basicConfig(format="%(message)s", handlers=[file_handler, stream_handler], level=logging.DEBUG)
 
+    # 전처리된 데이터 저장
+    prechartdir = os.path.join(settings.BASE_DIR, 'preprocessed_chart_data/%s' % stock_code)
+    if not os.path.isdir(prechartdir):
+        os.makedirs(prechartdir)
+    prechart_path = os.path.join(prechartdir, 'preprocessed_{}.csv'.format(stock_code))
+
     # 주식 데이터 준비
     chart_data = data_manager.load_chart_data(os.path.join(settings.BASE_DIR, 'chart_data/{}.csv'.format(stock_code)))
     prep_data = data_manager.preprocess(chart_data)
-    training_data = data_manager.build_training_data(prep_data)
+    training_data = data_manager.build_training_data(prep_data,prechart_path)
 
     # 기간 필터링
     training_data = training_data[(training_data['date'] >= '2017-01-01') & (training_data['date'] <= '2017-12-31')]
@@ -44,5 +50,7 @@ if __name__ == '__main__':
 
     # 정책 신경망을 파일로 저장
     model_dir = os.path.join(settings.BASE_DIR, 'models/%s' % stock_code)
+    if not os.path.isdir(model_dir):
+        os.makedirs(model_dir)
     model_path = os.path.join(model_dir, 'model_%s.h5' % timestr)
     policy_learner.policy_network.save_model(model_path)

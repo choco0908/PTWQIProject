@@ -14,7 +14,7 @@ def preprocess(chart_data):
         prep_data['volume_ma{}'.format(window)] = prep_data['volume'].rolling(window).mean()
     return prep_data
 
-def build_training_data(prep_data):
+def build_training_data(prep_data, prechart_path):
     training_data = prep_data
 
     training_data['open_lastclose_ratio'] = np.zeros(len(training_data))
@@ -30,5 +30,8 @@ def build_training_data(prep_data):
     for window in windows:
         training_data['close_ma%d_ratio' % window] = (training_data['close'] - training_data['close_ma%d' % window]) / training_data['close_ma%d' % window]
         training_data['volume_ma%d_ratio' % window] = (training_data['volume'] - training_data['volume_ma%d' % window]) / training_data['volume_ma%d' % window]
+
+    # 전처리된 데이터 저장
+    training_data.to_csv(prechart_path)
 
     return training_data
