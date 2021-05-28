@@ -1,4 +1,4 @@
-tensorflow==2.3.0
-keras==2.4.3
-mplfinance==0.12.7a17
-numpy==1.18.5
+keras==2.2.4
+tensorflow-gpu==1.15.2
+mplfinance
+numpy==1.19.5
