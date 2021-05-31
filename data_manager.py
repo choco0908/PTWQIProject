@@ -44,7 +44,7 @@ COLUMNS_TRAINING_DATA_V2 = [
     'bond_k3y_ma60_ratio', 'bond_k3y_ma120_ratio'
 ]
 
-def preprocess(data, prechart_path, ver='v1'):
+def preprocess(data, ver='v1'):
     windows = [5, 10, 20, 60, 120]
     for window in windows:
         data['close_ma{}'.format(window)] = data['close'].rolling(window).mean()
@@ -73,9 +73,6 @@ def preprocess(data, prechart_path, ver='v1'):
         data['frgn_lastfrgn_ratio'] = np.zeros(len(data))
         data.loc[1:, 'frgn_lastfrgn_ratio'] = (data['frgn'][1:].values - data['frgn'][:-1].values) / data['frgn'][:-1].replace(to_replace=0, method='ffill').replace(to_replace=0, method='bfill').values
 
-    # 전처리된 데이터 저장
-    data.to_csv(prechart_path)
-
     return data
 
 def load_data(fpath, prechart_path, date_from, date_to, ver='v2'):
@@ -89,7 +86,7 @@ def load_data(fpath, prechart_path, date_from, date_to, ver='v2'):
     data = data.sort_values(by='date').reset_index()
 
     # 데이터 전처리
-    data = preprocess(data, prechart_path)
+    data = preprocess(data)
 
     # 기간 필터링
     data['date'] = data['date'].str.replace('-', '')
@@ -111,5 +108,8 @@ def load_data(fpath, prechart_path, date_from, date_to, ver='v2'):
         training_data = training_data.apply(np.tanh)
     else:
         raise Exception('Invalid version.')
+
+    # 전처리된 데이터 저장
+    training_data.to_csv(prechart_path)
 
     return chart_data, training_data
